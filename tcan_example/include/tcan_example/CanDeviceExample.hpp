@@ -48,7 +48,7 @@ public:
 
 protected:
 	std::atomic<float> myMeasurement_;
+  int counter_ = 0;
 };
-
 
 } /* namespace tcan_example */

@@ -33,9 +33,7 @@ bool CanDeviceExample::initDevice() {
     // This function is automatically called when the device is added to the bus (with addDevice(..))
     // register the messages here with addCanMessage(..) and optionally restart the device with setNmtRestartRemoteDevice()
 
-    bus_->addCanMessage(DeviceCanOpen::TxSDOId + getNodeId(), this, &DeviceCanOpen::parseSDOAnswer); // register callback for read SDO answers
-    bus_->addCanMessage(DeviceCanOpen::TxNMTId + getNodeId(), this, &DeviceCanOpen::parseHeartBeat); // register callback for heartbeat messages
-    bus_->addCanMessage(DeviceCanOpen::TxPDO1Id + getNodeId(), this, &CanDeviceExample::parsePdo1); // register callback for Rx PDO 1
+    bus_->addCanMessage(0x80000000 | 0x0CFFF947, this, &CanDeviceExample::parsePdo1);
 
     setNmtRestartRemoteDevice();
     return true;
@@ -78,8 +76,9 @@ bool CanDeviceExample::parsePdo1(const tcan_can::CanMsg& cmsg) {
 
     // variable is atomic - no need for mutexes
     myMeasurement_ = cmsg.readint32(0);
+    ++counter_;
 
-    std::cout << "recieved PDO1 message\n";
+    std::cout << "recieved PDO1 message " << counter_ << "\n";
     return true;
 }
 

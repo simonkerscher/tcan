@@ -19,38 +19,7 @@ void CanManagerExample::init() {
     // options->canFilters.push_back({0x123, CAN_SFF_MASK});
 
     addSocketBus(BusId::BUS1, std::unique_ptr<tcan_can::SocketBusOptions>(new tcan_can::SocketBusOptions(options)));
-
-    // add some devices to the bus
-    for(unsigned int i=0; i<30; i++) {
-        addDeviceExample(BusId::BUS1, static_cast<DeviceExampleId>(i), static_cast<NodeId>(i+1));
-    }
-
-    // add a custom callback function
-    getCanBus(static_cast<unsigned int>(BusId::BUS1))->addCanMessage(tcan_can::DeviceCanOpen::RxPDOSyncId, this, &CanManagerExample::parseIncomingSyncBus1);
-
-    // add a second bus, semi-synchornous
-    options.mode_ = tcan::BusOptions::Mode::SemiSynchronous;
-    options.name_ = "can1";
-    addSocketBus(BusId::BUS2, std::unique_ptr<tcan_can::SocketBusOptions>(new tcan_can::SocketBusOptions(options)));
-
-    // add some devices to the second bus
-    for(unsigned int i=30; i<40; i++) {
-        addDeviceExample(BusId::BUS2, static_cast<DeviceExampleId>(i), static_cast<NodeId>(i+1));
-    }
-
-    getCanBus(static_cast<unsigned int>(BusId::BUS2))->addCanMessage(tcan_can::DeviceCanOpen::RxPDOSyncId, this, &CanManagerExample::parseIncomingSyncBus2);
-
-    // add a third bus, synchronous
-    options.mode_ = tcan::BusOptions::Mode::Synchronous;
-    options.name_ = "can2";
-    addSocketBus(BusId::BUS3, std::unique_ptr<tcan_can::SocketBusOptions>(new tcan_can::SocketBusOptions(options)));
-
-    // add some devices to the third bus
-    for(unsigned int i=40; i<50; i++) {
-        addDeviceExample(BusId::BUS3, static_cast<DeviceExampleId>(i), static_cast<NodeId>(i+1));
-    }
-
-    getCanBus(static_cast<unsigned int>(BusId::BUS3))->addCanMessage(tcan_can::DeviceCanOpen::RxPDOSyncId, this, &CanManagerExample::parseIncomingSyncBus3);
+    addDeviceExample(BusId::BUS1, static_cast<DeviceExampleId>(0), static_cast<NodeId>(1));
 
     // start the threads for semi-synchronous and asynchronous buses
     startThreads();
